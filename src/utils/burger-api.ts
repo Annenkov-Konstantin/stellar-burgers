@@ -75,7 +75,9 @@ export const getIngredientsApi = () =>
   fetch(`${URL}/ingredients`)
     .then((res) => checkResponse<TIngredientsResponse>(res))
     .then((data) => {
-      if (data?.success) return data.data;
+      if (data?.success) {
+        return data.data;
+      }
       return Promise.reject(data);
     });
 
@@ -95,7 +97,9 @@ export const getOrdersApi = () =>
       authorization: getCookie('accessToken')
     } as HeadersInit
   }).then((data) => {
-    if (data?.success) return data.orders;
+    if (data?.success) {
+      return data.orders;
+    }
     return Promise.reject(data);
   });
 

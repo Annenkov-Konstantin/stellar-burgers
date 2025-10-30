@@ -13,7 +13,8 @@ export const ProfileUI: FC<ProfileUIProps> = ({
   updateUserError,
   handleSubmit,
   handleCancel,
-  handleInputChange
+  handleInputChange,
+  isLoading
 }) => (
   <main className={`${commonStyles.container}`}>
     <div className={`mt-30 mr-15 ${styles.menu}`}>
@@ -35,6 +36,7 @@ export const ProfileUI: FC<ProfileUIProps> = ({
             errorText={''}
             size={'default'}
             icon={'EditIcon'}
+            disabled={isLoading}
           />
         </div>
         <div className='pb-6'>
@@ -48,6 +50,7 @@ export const ProfileUI: FC<ProfileUIProps> = ({
             errorText={''}
             size={'default'}
             icon={'EditIcon'}
+            disabled={isLoading}
           />
         </div>
         <div className='pb-6'>
@@ -61,6 +64,7 @@ export const ProfileUI: FC<ProfileUIProps> = ({
             errorText={''}
             size={'default'}
             icon={'EditIcon'}
+            disabled={isLoading}
           />
         </div>
         {isFormChanged && (
@@ -70,11 +74,17 @@ export const ProfileUI: FC<ProfileUIProps> = ({
               htmlType='button'
               size='medium'
               onClick={handleCancel}
+              disabled={isLoading}
             >
               Отменить
             </Button>
-            <Button type='primary' size='medium' htmlType='submit'>
-              Сохранить
+            <Button
+              type='primary'
+              size='medium'
+              htmlType='submit'
+              disabled={isLoading}
+            >
+              {isLoading ? 'Сохранение...' : 'Сохранить'}
             </Button>
           </div>
         )}

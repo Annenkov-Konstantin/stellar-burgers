@@ -1,25 +1,44 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from '../../services/store';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
+import { getIngredientsFromState } from '../../services/slices/ingredients';
+import { getFeedOrderByNumber } from '../../services/slices/feeds';
+import { getUserOrderByNumber } from '../../services/slices/userOrders';
+import {
+  fetchOrderByNumber,
+  getOrderDetails,
+  getOrderDetailsLoading,
+  getOrderDetailsError
+} from '../../services/slices/orderDetails';
 
 export const OrderInfo: FC = () => {
-  /** TODO: взять переменные orderData и ingredients из стора */
-  const orderData = {
-    createdAt: '',
-    ingredients: [],
-    _id: '',
-    status: '',
-    name: '',
-    updatedAt: 'string',
-    number: 0
-  };
+  const { number } = useParams<{ number: string }>();
+  const dispatch = useDispatch();
+  const ingredients: TIngredient[] = useSelector(getIngredientsFromState);
 
-  const ingredients: TIngredient[] = [];
+  const feedOrder = useSelector((state) =>
+    getFeedOrderByNumber(state)(number!)
+  );
+  const userOrder = useSelector((state) =>
+    getUserOrderByNumber(state)(number!)
+  );
+  const serverOrder = useSelector(getOrderDetails);
+  const loading = useSelector(getOrderDetailsLoading);
+  const error = useSelector(getOrderDetailsError);
 
-  /* Готовим данные для отображения */
+  const orderData = userOrder || feedOrder || serverOrder;
+
+  useEffect(() => {
+    if (!userOrder && !feedOrder && number && !isNaN(parseInt(number))) {
+      dispatch(fetchOrderByNumber(parseInt(number)));
+    }
+  }, [dispatch, number, userOrder, feedOrder]);
+
   const orderInfo = useMemo(() => {
-    if (!orderData || !ingredients.length) return null;
+    if (!orderData || !ingredients.length || error) return null;
 
     const date = new Date(orderData.createdAt);
 
@@ -40,7 +59,6 @@ export const OrderInfo: FC = () => {
         } else {
           acc[item].count++;
         }
-
         return acc;
       },
       {}
@@ -57,10 +75,14 @@ export const OrderInfo: FC = () => {
       date,
       total
     };
-  }, [orderData, ingredients]);
+  }, [orderData, ingredients, loading, error]);
+
+  if (loading && !orderInfo) {
+    return <Preloader />;
+  }
 
   if (!orderInfo) {
-    return <Preloader />;
+    return <div>Заказ не найден</div>;
   }
 
   return <OrderInfoUI orderInfo={orderInfo} />;
