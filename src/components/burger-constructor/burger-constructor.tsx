@@ -12,7 +12,7 @@ import {
   getDasOrderSent,
   getOrderData,
   orderBurger,
-  clearOrder
+  resetOrderModal
 } from '../../services/slices/orders';
 import { getUserData } from '../../services/slices/user';
 import { addUserOrder } from '../../services/slices/userOrders';
@@ -83,7 +83,7 @@ export const BurgerConstructor: FC = () => {
   };
 
   const closeOrderModal = () => {
-    dispatch(clearOrder());
+    dispatch(resetOrderModal());
   };
 
   const price = useMemo(
@@ -96,16 +96,14 @@ export const BurgerConstructor: FC = () => {
     [constructorItems]
   );
 
-  // Передаем полный объект заказа, но преобразуем ingredients
   const orderModalData: TOrder | null = useMemo(() => {
     if (!orderData.number || !dasOrderSent) return null;
 
-    // Преобразуем TOrderIngredient[] в string[] для соответствия TOrder
     const ingredientIds = orderData.ingredients.map((ing) => ing.id);
 
     return {
       ...orderData,
-      ingredients: ingredientIds // преобразуем к ожидаемому типу
+      ingredients: ingredientIds
     };
   }, [orderData, dasOrderSent]);
 

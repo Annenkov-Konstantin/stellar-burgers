@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { IngredientDetailsUI } from '../ui/ingredient-details';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/store';
 import { useParams } from 'react-router-dom';
 import {
   getIngredientsFromState,
@@ -10,7 +10,7 @@ import { IngredientDetailsSkeleton } from '../../components/ingredient-details-s
 import styles from '../../components/ingredient-details-skeleton/ingredient-details-skeleton.module.css';
 
 const useImagePreloader = (src: string) => {
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     setLoaded(false);

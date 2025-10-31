@@ -1,5 +1,5 @@
 import { FC, memo } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
   CurrencyIcon,
   FormattedDate
@@ -10,9 +10,12 @@ import styles from './order-card.module.css';
 import { OrderCardUIProps } from './type';
 import { OrderStatus } from '@components';
 
+{
+  /*Вкладки из общего списка заказов и из профиля*/
+}
 export const OrderCardUI: FC<OrderCardUIProps> = memo(
   ({ orderInfo, maxIngredients, locationState }) => (
-    <Link
+    <NavLink
       to={orderInfo.number.toString()}
       relative='path'
       state={locationState}
@@ -74,6 +77,6 @@ export const OrderCardUI: FC<OrderCardUIProps> = memo(
           <CurrencyIcon type='primary' />
         </div>
       </div>
-    </Link>
+    </NavLink>
   )
 );

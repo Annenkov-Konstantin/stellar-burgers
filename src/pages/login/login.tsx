@@ -1,4 +1,4 @@
-import { FC, SyntheticEvent, useState } from 'react';
+import { FC, SyntheticEvent } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
 import { LoginUI } from '@ui-pages';
 import {
@@ -6,26 +6,49 @@ import {
   getUserError,
   getUserLoading
 } from '../../services/slices/user';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useTypedLocation } from '../../hooks/use-typed-location';
+import { useForm } from '../../hooks/useForm';
+import { validators } from '../../utils/validators';
+
+export type LoginFormData = {
+  email: string;
+  password: string;
+};
 
 export const Login: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
+  const location = useTypedLocation();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { values, errors, isValid, setEmail, setPassword } =
+    useForm<LoginFormData>(
+      {
+        email: '',
+        password: ''
+      },
+      {
+        email: validators.email,
+        password: validators.required
+      }
+    );
 
   const error = useSelector(getUserError);
   const isLoading = useSelector(getUserLoading);
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    console.log('Form submitted, isValid:', isValid);
+
+    if (!isValid) {
+      console.log('Form is invalid, not submitting');
+      return;
+    }
 
     dispatch(
       loginUser({
-        email,
-        password
+        email: values.email,
+        password: values.password
       })
     )
       .unwrap()
@@ -34,20 +57,24 @@ export const Login: FC = () => {
         navigate(from, { replace: true });
       })
       .catch((err) => {
-        // Ошибка уже обработана в слайсе
         console.error('Login error:', err);
       });
   };
 
+  // Показываем только серверные ошибки
+  const serverError = error || '';
+
   return (
     <LoginUI
-      errorText={error || ''}
-      email={email}
+      errorText={serverError}
+      email={values.email}
       setEmail={setEmail}
-      password={password}
+      password={values.password}
       setPassword={setPassword}
       handleSubmit={handleSubmit}
       isLoading={isLoading}
+      isValid={isValid}
+      fieldErrors={errors}
     />
   );
 };

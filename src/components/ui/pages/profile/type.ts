@@ -1,15 +1,21 @@
-import { ChangeEvent, SyntheticEvent } from 'react';
+import React, { SyntheticEvent } from 'react';
 
-export type ProfileUIProps = {
+export interface ProfileUIProps {
   formValue: {
     name: string;
     email: string;
     password: string;
   };
   isFormChanged: boolean;
-  handleSubmit: (e: SyntheticEvent) => void;
+  updateUserError: string;
   handleCancel: (e: SyntheticEvent) => void;
-  handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  updateUserError?: string;
-  isLoading: boolean;
-};
+  handleSubmit: (e: SyntheticEvent) => void;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  isLoading?: boolean;
+  isValid?: boolean;
+  fieldErrors?: {
+    name?: string;
+    email?: string;
+    password?: string;
+  };
+}

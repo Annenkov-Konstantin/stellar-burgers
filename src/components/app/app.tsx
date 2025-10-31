@@ -1,6 +1,6 @@
 import '../../index.css';
 import styles from './app.module.css';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/store';
 import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
@@ -20,11 +20,8 @@ import { NotFound404 } from '../../pages/not-fount-404';
 import { OrderInfo } from '../order-info/order-info';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Preloader } from '../ui/preloader';
-import {
-  getUser,
-  isAuthChecked,
-  getUserError
-} from '../../services/slices/user';
+import { useTypedLocation } from '../../hooks/use-typed-location';
+import { getUser, isAuthChecked } from '../../services/slices/user';
 import {
   getIngredients,
   getIngredientsIsRequested,
@@ -33,13 +30,12 @@ import {
 
 const App = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const location = useTypedLocation();
   const dispatch = useDispatch();
 
   const ingredientsIsRequested = useSelector(getIngredientsIsRequested);
   const ingredientsError = useSelector(getIngredientsError);
   const authChecked = useSelector(isAuthChecked);
-  const authError = useSelector(getUserError);
 
   const background = location.state?.background;
 

@@ -1,10 +1,16 @@
-import { Dispatch, SetStateAction } from 'react';
-import { PageUIProps } from '../common-type';
+import { Dispatch, SetStateAction, SyntheticEvent } from 'react';
 
-export type ResetPasswordUIProps = Omit<PageUIProps, 'email' | 'setEmail'> & {
+export interface ResetPasswordUIProps {
+  errorText: string;
   password: string;
   token: string;
   setPassword: Dispatch<SetStateAction<string>>;
   setToken: Dispatch<SetStateAction<string>>;
+  handleSubmit: (e: SyntheticEvent) => void;
   isLoading?: boolean;
-};
+  isValid?: boolean;
+  fieldErrors?: {
+    password?: string;
+    token?: string;
+  };
+}

@@ -1,5 +1,5 @@
 import { FC, memo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useTypedLocation } from '../../hooks/use-typed-location';
 
 import { BurgerIngredientUI } from '@ui';
 import { TBurgerIngredientProps } from './type';
@@ -10,11 +10,11 @@ import {
   getOrdersId,
   OrderActions
 } from '../../services/slices/orders';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../services/store';
 
 export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
   ({ ingredient, count }) => {
-    const location = useLocation();
+    const location = useTypedLocation();
     const ordersId = useSelector(getOrdersId);
     const dispatch = useDispatch();
 

@@ -1,10 +1,11 @@
 import { FC } from 'react';
 import styles from './profile-menu.module.css';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { ProfileMenuUIProps } from './type';
+import { useTypedLocation } from '../../../hooks/use-typed-location';
 
 export const ProfileMenuUI: FC<ProfileMenuUIProps> = ({ handleLogout }) => {
-  const location = useLocation();
+  const location = useTypedLocation();
 
   return (
     <>

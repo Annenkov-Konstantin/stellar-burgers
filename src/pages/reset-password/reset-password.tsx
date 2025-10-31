@@ -1,4 +1,4 @@
-import { FC, SyntheticEvent, useEffect, useState } from 'react';
+import { FC, SyntheticEvent, useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
 import { ResetPasswordUI } from '@ui-pages';
@@ -8,13 +8,29 @@ import {
   getResetPasswordStatus,
   resetPasswordStatus
 } from '../../services/slices/user';
+import { useForm } from '../../hooks/useForm';
+import { validators } from '../../utils/validators';
+
+export type ResetPasswordFormData = {
+  password: string;
+  token: string;
+};
 
 export const ResetPassword: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [password, setPassword] = useState('');
-  const [token, setToken] = useState('');
+  const { values, errors, isValid, setPassword, setToken } =
+    useForm<ResetPasswordFormData>(
+      {
+        password: '',
+        token: ''
+      },
+      {
+        password: validators.passwordMin5,
+        token: validators.required
+      }
+    );
 
   const error = useSelector(getUserError);
   const { request: resetPasswordRequest, success: resetPasswordSuccess } =
@@ -43,18 +59,32 @@ export const ResetPassword: FC = () => {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
 
-    dispatch(resetPassword({ password, token }));
+    if (!isValid) {
+      return;
+    }
+
+    dispatch(
+      resetPassword({
+        password: values.password,
+        token: values.token
+      })
+    );
   };
+
+  // Показываем только серверные ошибки
+  const serverError = error || '';
 
   return (
     <ResetPasswordUI
-      errorText={error || ''}
-      password={password}
-      token={token}
+      errorText={serverError}
+      password={values.password}
+      token={values.token}
       setPassword={setPassword}
       setToken={setToken}
       handleSubmit={handleSubmit}
       isLoading={resetPasswordRequest}
+      isValid={isValid}
+      fieldErrors={errors}
     />
   );
 };

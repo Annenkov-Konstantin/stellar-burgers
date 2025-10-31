@@ -1,51 +1,62 @@
-import { FC, useState, SyntheticEvent, useEffect } from 'react';
+import { FC, SyntheticEvent } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
 import { ForgotPasswordUI } from '@ui-pages';
 import {
   forgotPassword,
   getUserError,
-  getForgotPasswordStatus,
-  forgotPasswordStatus
+  getForgotPasswordStatus
 } from '../../services/slices/user';
+import { useForm } from '../../hooks/useForm';
+import { validators } from '../../utils/validators';
+
+export type ForgotPasswordFormData = {
+  email: string;
+};
 
 export const ForgotPassword: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
-
-  const error = useSelector(getUserError);
-  const { request: forgotPasswordRequest, success: forgotPasswordSuccess } =
-    useSelector(getForgotPasswordStatus);
-
-  useEffect(
-    () => () => {
-      dispatch(forgotPasswordStatus());
+  const { values, errors, isValid, setEmail } = useForm<ForgotPasswordFormData>(
+    {
+      email: ''
     },
-    [dispatch]
+    {
+      email: validators.email
+    }
   );
 
-  useEffect(() => {
-    if (forgotPasswordSuccess) {
-      localStorage.setItem('resetPassword', 'true');
-      navigate('/reset-password', { replace: true });
-    }
-  }, [forgotPasswordSuccess, navigate]);
+  const error = useSelector(getUserError);
+  const { request: isLoading, success } = useSelector(getForgotPasswordStatus);
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
 
-    dispatch(forgotPassword({ email }));
+    if (!isValid) {
+      return;
+    }
+
+    dispatch(forgotPassword({ email: values.email }))
+      .unwrap()
+      .then(() => {
+        localStorage.setItem('resetPassword', 'true');
+        navigate('/reset-password', { replace: true });
+      })
+      .catch((err) => {
+        console.error('Forgot password error:', err);
+      });
   };
 
   return (
     <ForgotPasswordUI
       errorText={error || ''}
-      email={email}
+      email={values.email}
       setEmail={setEmail}
       handleSubmit={handleSubmit}
-      isLoading={forgotPasswordRequest}
+      isLoading={isLoading}
+      isValid={isValid}
+      fieldErrors={errors}
     />
   );
 };

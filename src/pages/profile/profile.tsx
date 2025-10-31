@@ -1,5 +1,12 @@
 import { ProfileUI } from '@ui-pages';
-import { FC, SyntheticEvent, useEffect, useState, useCallback } from 'react';
+import {
+  FC,
+  SyntheticEvent,
+  useEffect,
+  useState,
+  useCallback,
+  useMemo
+} from 'react';
 import { useSelector, useDispatch } from '../../services/store';
 import {
   getUserData,
@@ -7,6 +14,7 @@ import {
   getUserError,
   getUserLoading
 } from '../../services/slices/user';
+import { validators } from '../../utils/validators';
 
 export const Profile: FC = () => {
   const dispatch = useDispatch();
@@ -14,12 +22,71 @@ export const Profile: FC = () => {
   const updateError = useSelector(getUserError);
   const isLoading = useSelector(getUserLoading);
 
-  const [formValue, setFormValue] = useState({
+  const [formValue, setFormValue] = useState<{
+    name: string;
+    email: string;
+    password: string;
+  }>({
     name: '',
     email: '',
     password: ''
   });
 
+  const [errors, setErrors] = useState<{
+    name?: string;
+    email?: string;
+    password?: string;
+  }>({});
+
+  // Определяем, какие поля были изменены
+  const changedFields = useMemo(() => {
+    const changes = {
+      name: formValue.name !== user?.name,
+      email: formValue.email !== user?.email,
+      password: !!formValue.password
+    };
+    return changes;
+  }, [formValue, user]);
+
+  // Валидация только измененных полей
+  const isValid = useMemo(() => {
+    // Имя: если изменено, должно быть не пустым
+    const nameValid = !changedFields.name || formValue.name.trim() !== '';
+
+    // Email: если изменен, должен быть валидным
+    const emailValid =
+      !changedFields.email || validators.email(formValue.email);
+
+    // Пароль: если введен (изменен), должен быть минимум 6 символов
+    const passwordValid =
+      !changedFields.password || formValue.password.length >= 6;
+
+    return nameValid && emailValid && passwordValid;
+  }, [formValue, changedFields]);
+
+  // Обновление ошибок только для измененных полей
+  useEffect(() => {
+    const newErrors: typeof errors = {};
+
+    // Проверяем имя только если оно было изменено
+    if (changedFields.name && !formValue.name.trim()) {
+      newErrors.name = 'Имя обязательно';
+    }
+
+    // Проверяем email только если он был изменен
+    if (changedFields.email && !validators.email(formValue.email)) {
+      newErrors.email = 'Некорректный формат email';
+    }
+
+    // Проверяем пароль только если он был введен
+    if (changedFields.password && formValue.password.length < 6) {
+      newErrors.password = 'Пароль должен содержать минимум 6 символов';
+    }
+
+    setErrors(newErrors);
+  }, [formValue, changedFields]);
+
+  // Заполняем форму данными пользователя
   useEffect(() => {
     if (user) {
       setFormValue({
@@ -31,21 +98,20 @@ export const Profile: FC = () => {
   }, [user]);
 
   const isFormChanged =
-    formValue.name !== user?.name ||
-    formValue.email !== user?.email ||
-    !!formValue.password;
+    changedFields.name || changedFields.email || changedFields.password;
 
   const handleSubmit = useCallback(
     (e: SyntheticEvent) => {
       e.preventDefault();
 
-      if (isFormChanged) {
+      if (isFormChanged && isValid) {
         const updateData: { name?: string; email?: string; password?: string } =
           {};
 
-        if (formValue.name !== user?.name) updateData.name = formValue.name;
-        if (formValue.email !== user?.email) updateData.email = formValue.email;
-        if (formValue.password) updateData.password = formValue.password;
+        // Добавляем в запрос только измененные поля
+        if (changedFields.name) updateData.name = formValue.name;
+        if (changedFields.email) updateData.email = formValue.email;
+        if (changedFields.password) updateData.password = formValue.password;
 
         dispatch(updateUser(updateData))
           .unwrap()
@@ -57,26 +123,29 @@ export const Profile: FC = () => {
           });
       }
     },
-    [dispatch, formValue, isFormChanged, user]
+    [dispatch, formValue, isFormChanged, isValid, changedFields]
   );
 
   const handleCancel = useCallback(
     (e: SyntheticEvent) => {
       e.preventDefault();
-      setFormValue({
-        name: user?.name || '',
-        email: user?.email || '',
-        password: ''
-      });
+      if (user) {
+        setFormValue({
+          name: user.name || '',
+          email: user.email || '',
+          password: ''
+        });
+      }
     },
     [user]
   );
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFormValue((prevState) => ({
-        ...prevState,
-        [e.target.name]: e.target.value
+      const { name, value } = e.target;
+      setFormValue((prev) => ({
+        ...prev,
+        [name]: value
       }));
     },
     []
@@ -91,6 +160,8 @@ export const Profile: FC = () => {
       handleSubmit={handleSubmit}
       handleInputChange={handleInputChange}
       isLoading={isLoading}
+      isValid={isValid}
+      fieldErrors={errors}
     />
   );
 };

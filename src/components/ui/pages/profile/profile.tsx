@@ -14,7 +14,9 @@ export const ProfileUI: FC<ProfileUIProps> = ({
   handleSubmit,
   handleCancel,
   handleInputChange,
-  isLoading
+  isLoading,
+  isValid = false,
+  fieldErrors = {}
 }) => (
   <main className={`${commonStyles.container}`}>
     <div className={`mt-30 mr-15 ${styles.menu}`}>
@@ -32,8 +34,8 @@ export const ProfileUI: FC<ProfileUIProps> = ({
             onChange={handleInputChange}
             value={formValue.name}
             name={'name'}
-            error={false}
-            errorText={''}
+            error={!!fieldErrors.name}
+            errorText={fieldErrors.name || ''}
             size={'default'}
             icon={'EditIcon'}
             disabled={isLoading}
@@ -46,8 +48,8 @@ export const ProfileUI: FC<ProfileUIProps> = ({
             onChange={handleInputChange}
             value={formValue.email}
             name={'email'}
-            error={false}
-            errorText={''}
+            error={!!fieldErrors.email}
+            errorText={fieldErrors.email || ''}
             size={'default'}
             icon={'EditIcon'}
             disabled={isLoading}
@@ -60,8 +62,8 @@ export const ProfileUI: FC<ProfileUIProps> = ({
             onChange={handleInputChange}
             value={formValue.password}
             name={'password'}
-            error={false}
-            errorText={''}
+            error={!!fieldErrors.password}
+            errorText={fieldErrors.password || ''}
             size={'default'}
             icon={'EditIcon'}
             disabled={isLoading}
@@ -82,7 +84,7 @@ export const ProfileUI: FC<ProfileUIProps> = ({
               type='primary'
               size='medium'
               htmlType='submit'
-              disabled={isLoading}
+              disabled={!isValid || isLoading}
             >
               {isLoading ? 'Сохранение...' : 'Сохранить'}
             </Button>

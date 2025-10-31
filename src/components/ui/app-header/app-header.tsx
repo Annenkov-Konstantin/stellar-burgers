@@ -1,5 +1,6 @@
 import { FC } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { useTypedLocation } from '../../../hooks/use-typed-location';
 import styles from './app-header.module.css';
 import { TAppHeaderUIProps } from './type';
 import {
@@ -10,7 +11,7 @@ import {
 } from '@zlden/react-developer-burger-ui-components';
 
 export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => {
-  const location = useLocation();
+  const location = useTypedLocation();
 
   const isConstructorActive = location.pathname === '/';
   const isFeedActive = location.pathname.startsWith('/feed');
@@ -21,7 +22,7 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => {
       <nav className={`${styles.menu} p-4`}>
         <div className={styles.menu_part_left}>
           {/* Конструктор */}
-          <Link
+          <NavLink
             to='/'
             className={`${styles.menu_item} ${isConstructorActive ? styles.menu_item_active : ''}`}
           >
@@ -31,10 +32,10 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => {
             >
               Конструктор
             </p>
-          </Link>
+          </NavLink>
 
           {/* Лента заказов */}
-          <Link
+          <NavLink
             to='/feed'
             className={`${styles.menu_item} ${isFeedActive ? styles.menu_item_active : ''}`}
           >
@@ -44,16 +45,16 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => {
             >
               Лента заказов
             </p>
-          </Link>
+          </NavLink>
         </div>
 
         {/* Лого */}
-        <Link to='/' className={styles.logo}>
+        <NavLink to='/' className={styles.logo}>
           <Logo className='' />
-        </Link>
+        </NavLink>
 
         {/* Личный кабинет */}
-        <Link
+        <NavLink
           to='/profile'
           className={`${styles.menu_item} ${isProfileActive ? styles.menu_item_active : ''}`}
         >
@@ -61,7 +62,7 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => {
           <p className={`text text_type_main-default ml-2 ${styles.menu_text}`}>
             {userName || 'Личный кабинет'}
           </p>
-        </Link>
+        </NavLink>
       </nav>
     </header>
   );

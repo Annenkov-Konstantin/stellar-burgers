@@ -77,11 +77,6 @@ const order = createSlice({
       });
       state.updatedAt = Date.now().toString();
     },
-    clearOrder: (state: TOrdersState) => {
-      const savedId = state._id;
-      Object.assign(state, initialOrdersState);
-      state._id = savedId;
-    },
     reorderIngredients: (
       state: TOrdersState,
       action: PayloadAction<TOrderIngredient[]>
@@ -97,8 +92,16 @@ const order = createSlice({
         (ing) => ing.uniqueId !== action.payload.uniqueId
       );
       state.updatedAt = Date.now().toString();
+    },
+    resetOrderModal: (state: TOrdersState) => {
+      state.number = 0;
+      state.orderHasSent = false;
+      state.status = '';
+      state.name = '';
+      state.error = '';
     }
   },
+
   selectors: {
     getIngredientsInOrder: (state) => state.ingredients,
     getIngredientsIds: (state) => state.ingredients.map((ing) => ing.id),
@@ -123,6 +126,7 @@ const order = createSlice({
             state.orderHasSent = true;
             state.name = action.payload.name;
             state.number = action.payload.order.number;
+            state.ingredients = [];
           } else {
             state.status = 'unsuccessful';
             state.orderHasSent = true;
@@ -143,8 +147,8 @@ export const {
   initOrder,
   changeOrder,
   reorderIngredients,
-  clearOrder,
-  removeIngredientByUniqueId
+  removeIngredientByUniqueId,
+  resetOrderModal
 } = order.actions;
 export const {
   getIngredientsInOrder,

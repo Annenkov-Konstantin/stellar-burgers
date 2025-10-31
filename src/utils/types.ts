@@ -1,3 +1,14 @@
+import { Location } from 'react-router-dom';
+
+export type LocationState = {
+  background?: Location;
+  from?: string;
+  pathname?: string;
+  // добавить другие поля, которые используются в state
+} | null;
+
+export type AppLocation = Location<LocationState>;
+
 export type TIngredient = {
   _id: string;
   name: string;

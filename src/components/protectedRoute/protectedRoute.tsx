@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import { useSelector } from '../../services/store';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { Preloader } from '../ui/preloader';
+import { useTypedLocation } from '../../hooks/use-typed-location';
 
 type ProtectedRouteProps = {
   onlyUnauth?: boolean;
@@ -13,7 +14,7 @@ export const ProtectedRoute: FC<ProtectedRouteProps> = ({
   children
 }) => {
   const { user, isAuthChecked } = useSelector((state) => state.user);
-  const location = useLocation();
+  const location = useTypedLocation();
 
   if (!isAuthChecked) {
     return <Preloader />;

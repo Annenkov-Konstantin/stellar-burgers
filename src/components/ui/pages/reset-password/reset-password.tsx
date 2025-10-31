@@ -5,7 +5,7 @@ import {
   PasswordInput
 } from '@zlden/react-developer-burger-ui-components';
 import styles from '../common.module.css';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { ResetPasswordUIProps } from './type';
 
 export const ResetPasswordUI: FC<ResetPasswordUIProps> = ({
@@ -15,7 +15,9 @@ export const ResetPasswordUI: FC<ResetPasswordUIProps> = ({
   setPassword,
   setToken,
   handleSubmit,
-  isLoading = false
+  isLoading = false,
+  isValid = false,
+  fieldErrors = {}
 }) => (
   <main className={styles.container}>
     <div className={`pt-6 ${styles.wrapCenter}`}>
@@ -33,6 +35,12 @@ export const ResetPasswordUI: FC<ResetPasswordUIProps> = ({
             placeholder='Введите новый пароль'
             disabled={isLoading}
           />
+          {/* Отображаем ошибку валидации пароля отдельно */}
+          {fieldErrors.password && (
+            <p className={`${styles.error} text text_type_main-default pt-2`}>
+              {fieldErrors.password}
+            </p>
+          )}
         </div>
         <div className='pb-6'>
           <Input
@@ -41,8 +49,8 @@ export const ResetPasswordUI: FC<ResetPasswordUIProps> = ({
             onChange={(e) => setToken(e.target.value)}
             value={token}
             name='token'
-            error={false}
-            errorText=''
+            error={!!fieldErrors.token}
+            errorText={fieldErrors.token || ''}
             size='default'
             disabled={isLoading}
           />
@@ -52,11 +60,12 @@ export const ResetPasswordUI: FC<ResetPasswordUIProps> = ({
             type='primary'
             size='medium'
             htmlType='submit'
-            disabled={isLoading}
+            disabled={!isValid || isLoading}
           >
             {isLoading ? 'Сохранение...' : 'Сохранить'}
           </Button>
         </div>
+        {/* Показываем только серверные ошибки */}
         {errorText && (
           <p className={`${styles.error} text text_type_main-default pb-6`}>
             {errorText}
@@ -65,9 +74,9 @@ export const ResetPasswordUI: FC<ResetPasswordUIProps> = ({
       </form>
       <div className={`${styles.question} text text_type_main-default pb-6`}>
         Вспомнили пароль?
-        <Link to={'/login'} className={`pl-2 ${styles.link}`}>
+        <NavLink to={'/login'} className={`pl-2 ${styles.NavLink}`}>
           Войти
-        </Link>
+        </NavLink>
       </div>
     </div>
   </main>
