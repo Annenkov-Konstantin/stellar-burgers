@@ -27,7 +27,7 @@ export const useForm = <T extends Record<string, string>>(
   );
 
   const setters = useMemo(() => {
-    const result: any = {};
+    const result: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
 
     Object.keys(initialValues).forEach((key) => {
       const setterName = `set${key.charAt(0).toUpperCase() + key.slice(1)}`;

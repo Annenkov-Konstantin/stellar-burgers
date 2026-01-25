@@ -1,4 +1,4 @@
-import { TConstructorIngredient, TIngredient } from '@utils-types';
+import { TIngredient } from '@utils-types';
 
 export type BurgerConstructorElementProps = {
   ingredient: TIngredient & { uniqueId: string };

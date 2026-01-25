@@ -11,13 +11,13 @@ export const fetchOrderByNumber = createAsyncThunk(
   }
 );
 
-type TOrderByNumberState = {
+export type TOrderByNumberState = {
   order: TOrder | null;
   isLoading: boolean;
   error: string | null;
 };
 
-const initialState: TOrderByNumberState = {
+export const initialState: TOrderByNumberState = {
   order: null,
   isLoading: false,
   error: null

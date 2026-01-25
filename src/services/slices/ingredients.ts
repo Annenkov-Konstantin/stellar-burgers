@@ -13,7 +13,7 @@ type TIngredientState = {
   error: string | null;
 };
 
-const ingredientsInitialState: TIngredientState = {
+export const ingredientsInitialState: TIngredientState = {
   items: [],
   ingredientsIsLoading: false,
   ingredientsIsRequested: false,
@@ -34,6 +34,7 @@ const ingredientsSlice = createSlice({
     builder
       .addCase(getIngredients.pending, (state) => {
         state.ingredientsIsLoading = true;
+        state.error = null;
       })
       .addCase(getIngredients.fulfilled, (state, action) => {
         state.ingredientsIsLoading = false;

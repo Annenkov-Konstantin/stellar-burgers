@@ -10,13 +10,13 @@ export const fetchUserOrders = createAsyncThunk(
   }
 );
 
-type TUserOrdersState = {
+export type TUserOrdersState = {
   orders: TOrder[];
   isLoading: boolean;
   error: string | null;
 };
 
-const initialState: TUserOrdersState = {
+export const initialState: TUserOrdersState = {
   orders: [],
   isLoading: false,
   error: null

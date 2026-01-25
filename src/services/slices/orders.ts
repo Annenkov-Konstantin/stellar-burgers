@@ -41,7 +41,7 @@ export type TOrdersState = {
   error?: string;
 };
 
-const initialOrdersState: TOrdersState = {
+export const initialOrdersState: TOrdersState = {
   _id: '',
   status: '',
   name: '',

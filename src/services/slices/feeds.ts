@@ -17,9 +17,9 @@ type TFeedsStatus = {
   error: string | null;
 };
 
-type TFeedsState = TFeedsStatus & TOrdersData;
+export type TFeedsState = TFeedsStatus & TOrdersData;
 
-const feedInitialState: TFeedsState = {
+export const feedInitialState: TFeedsState = {
   orders: [],
   total: 0,
   totalToday: 0,
@@ -45,6 +45,7 @@ const feedsSlice = createSlice({
     builder
       .addCase(getFeeds.pending, (state) => {
         state.feedsIsLoading = true;
+        state.error = null;
       })
       .addCase(getFeeds.fulfilled, (state, action) => {
         state.orders = action.payload.orders;

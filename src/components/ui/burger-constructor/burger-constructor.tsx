@@ -20,7 +20,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
   const getButtonText = () => {
     if (orderRequest) return 'Оформляем...';
     if (!constructorItems.bun && constructorItems.ingredients.length === 0)
-      return 'Выберите инредиенты';
+      return 'Выберите ингредиенты';
     if (!constructorItems.bun) return 'Добавьте булку';
     if (constructorItems.ingredients.length === 0) return 'Добавьте начинку';
     return 'Оформить заказ';
@@ -34,7 +34,10 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
   return (
     <section className={styles.burger_constructor}>
       {constructorItems.bun ? (
-        <div className={`${styles.element} mb-4 mr-4`}>
+        <div
+          className={`${styles.element} mb-4 mr-4`}
+          data-testid='burger-ingredient'
+        >
           <ConstructorElement
             type='top'
             isLocked
@@ -69,7 +72,10 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
         )}
       </ul>
       {constructorItems.bun ? (
-        <div className={`${styles.element} mt-4 mr-4`}>
+        <div
+          className={`${styles.element} mt-4 mr-4`}
+          data-testid='burger-ingredient'
+        >
           <ConstructorElement
             type='bottom'
             isLocked

@@ -68,7 +68,7 @@ export const logoutUser = createAsyncThunk('user/logout', async () => {
   return response;
 });
 
-type TUserState = {
+export type TUserState = {
   user: TUser | null;
   isAuthChecked: boolean;
   isLoading: boolean;
@@ -79,7 +79,7 @@ type TUserState = {
   resetPasswordSuccess: boolean;
 };
 
-const initialState: TUserState = {
+export const initialState: TUserState = {
   user: null,
   isAuthChecked: false,
   isLoading: false,

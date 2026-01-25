@@ -28,7 +28,7 @@ export const ForgotPassword: FC = () => {
   );
 
   const error = useSelector(getUserError);
-  const { request: isLoading, success } = useSelector(getForgotPasswordStatus);
+  const { request: isLoading } = useSelector(getForgotPasswordStatus);
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
