@@ -397,4 +397,33 @@ describe('Edge cases для слайса order', () => {
     expect(state.ingredients).toEqual([mockIngredient1, mockIngredient2]);
     expect(state.status).toBe('unsuccessful');
   });
+  // Удаление из пустого конструктора
+  test('Должен корректно обрабатывать удаление из пустого конструктора', () => {
+    const action = removeIngredientByUniqueId({ uniqueId: 'non-existent' });
+    const state = orderReducer(initialOrdersState, action);
+
+    expect(state.ingredients).toEqual([]);
+    expect(state.updatedAt).toBeDefined(); // updatedAt все равно обновляется
+    expect(state.ingredients).toHaveLength(0);
+  });
+
+  // Попытка перемещения ингредиента с некорректными индексами
+  test('Должен корректно обрабатывать массив с другим набором уникальных ID', () => {
+    const initialStateWithIngredients = {
+      ...initialOrdersState,
+      ingredients: [mockIngredient1, mockIngredient2]
+    };
+
+    const differentIngredients = [
+      { id: 'different-1', uniqueId: 'different-unique-1' },
+      { id: 'different-2', uniqueId: 'different-unique-2' }
+    ];
+
+    const action = reorderIngredients(differentIngredients);
+    const state = orderReducer(initialStateWithIngredients, action);
+
+    // Должен заменить на новый массив, даже если uniqueId другие
+    expect(state.ingredients).toEqual(differentIngredients);
+    expect(state.updatedAt).toBeDefined();
+  });
 });

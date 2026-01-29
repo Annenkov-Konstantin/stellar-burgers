@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">35.56% </span>
+                <span class="strong">34.46% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>85/239</span>
+                <span class='fraction'>81/235</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">35.56% </span>
+                <span class="strong">34.46% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>85/239</span>
+                <span class='fraction'>81/235</span>
             </div>
         
             
@@ -298,11 +298,7 @@
 <a name='L233'></a><a href='#L233'>233</a>
 <a name='L234'></a><a href='#L234'>234</a>
 <a name='L235'></a><a href='#L235'>235</a>
-<a name='L236'></a><a href='#L236'>236</a>
-<a name='L237'></a><a href='#L237'>237</a>
-<a name='L238'></a><a href='#L238'>238</a>
-<a name='L239'></a><a href='#L239'>239</a>
-<a name='L240'></a><a href='#L240'>240</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L236'></a><a href='#L236'>236</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -360,10 +356,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -542,7 +534,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { setCookie, getCookie } from './cookie';
-import { TIngredient, TOrder, TOrdersData, TUser } from './types';
+import { TIngredient, TOrder, TUser } from './types';
 &nbsp;
 const URL = process.env.BURGER_API_URL;
 &nbsp;
@@ -608,10 +600,6 @@ type TFeedsResponse = TServerResponse&lt;{
   orders: TOrder[];
   total: number;
   totalToday: number;
-}&gt;;
-&nbsp;
-type TOrdersResponse = TServerResponse&lt;{
-  data: TOrder[];
 }&gt;;
 &nbsp;
 export const getIngredientsApi = <span class="fstat-no" title="function not covered" >() =&gt;</span>
@@ -731,7 +719,7 @@ export const forgotPasswordApi = <span class="fstat-no" title="function not cove
 <span class="cstat-no" title="statement not covered" >    },</span>
 <span class="cstat-no" title="statement not covered" >    body: JSON.stringify(data)</span>
 <span class="cstat-no" title="statement not covered" >  })</span>
-<span class="cstat-no" title="statement not covered" >    .then((res) =&gt; checkResponse&lt;TServerResponse&lt;{}&gt;&gt;(res))</span>
+<span class="cstat-no" title="statement not covered" >    .then((res) =&gt; checkResponse&lt;TServerResponse&lt;{ message: string }&gt;&gt;(res))</span>
 <span class="cstat-no" title="statement not covered" >    .then((data) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (data?.success) return data;</span>
 <span class="cstat-no" title="statement not covered" >      return Promise.reject(data);</span>
@@ -745,7 +733,7 @@ export const resetPasswordApi = <span class="fstat-no" title="function not cover
 <span class="cstat-no" title="statement not covered" >    },</span>
 <span class="cstat-no" title="statement not covered" >    body: JSON.stringify(data)</span>
 <span class="cstat-no" title="statement not covered" >  })</span>
-<span class="cstat-no" title="statement not covered" >    .then((res) =&gt; checkResponse&lt;TServerResponse&lt;{}&gt;&gt;(res))</span>
+<span class="cstat-no" title="statement not covered" >    .then((res) =&gt; checkResponse&lt;TServerResponse&lt;{ message: string }&gt;&gt;(res))</span>
 <span class="cstat-no" title="statement not covered" >    .then((data) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (data?.success) return data;</span>
 <span class="cstat-no" title="statement not covered" >      return Promise.reject(data);</span>
@@ -779,7 +767,7 @@ export const logoutApi = <span class="fstat-no" title="function not covered" >()
 <span class="cstat-no" title="statement not covered" >    body: JSON.stringify({</span>
 <span class="cstat-no" title="statement not covered" >      token: localStorage.getItem('refreshToken')</span>
 <span class="cstat-no" title="statement not covered" >    })</span>
-<span class="cstat-no" title="statement not covered" >  }).then((res) =&gt; checkResponse&lt;TServerResponse&lt;{}&gt;&gt;(res));</span>
+<span class="cstat-no" title="statement not covered" >  }).then((res) =&gt; checkResponse&lt;TServerResponse&lt;{ message: string }&gt;&gt;(res));</span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -787,7 +775,7 @@ export const logoutApi = <span class="fstat-no" title="function not covered" >()
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-24T12:08:53.377Z
+                at 2026-01-29T18:29:07.071Z
             </div>
         <script src="../prettify.js"></script>
         <script>

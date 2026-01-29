@@ -7,9 +7,14 @@ import ingredientsReducer, {
   getIngredientsIsRequested,
   getIngredientsError
 } from '../services/slices/ingredients';
+import { TIngredient } from '../utils/types';
+
+type TResponse = {
+  __v: number;
+};
 
 // Mock данные для тестов
-const mockIngredientsData = [
+const mockIngredientsData: (TResponse & TIngredient)[] = [
   {
     _id: '643d69a5c3f7b9001cfa093c',
     name: 'Краторная булка N-200i',
@@ -181,7 +186,7 @@ describe('Тестируем слайс ingredients', () => {
 // Дополнительные тесты для проверки edge cases
 describe('Edge cases для слайса ingredients', () => {
   test('Должен корректно обрабатывать fulfilled с пустыми данными', () => {
-    const emptyData: any[] = [];
+    const emptyData: TIngredient[] = [];
 
     const action = {
       type: getIngredients.fulfilled.type,
