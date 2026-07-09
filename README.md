@@ -18,7 +18,7 @@
 
 ### Интерфейс сайта
 
-[🔗 Посмотреть демо](https://annenkov-konstantin.github.io/stellar-burgers/) • [💻 Исходный код](https://github.com/Annenkov-Konstantin/stellar-burgers)
+[🔗 Посмотреть демо](https://annenkov-konstantin.github.io/stellar-burgers/)
 
 SPA-приложение для заказа бургеров на React с использованием Redux Toolkit для управления состоянием и JWT-авторизации. Позволяет собирать бургер из ингредиентов, оформлять заказы, регистрироваться, входить в систему и просматривать историю заказов.
 
